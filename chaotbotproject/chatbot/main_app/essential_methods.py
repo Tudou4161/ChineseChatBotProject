@@ -1,35 +1,3 @@
-from django.shortcuts import render
-from tensorflow.keras import models
-from tensorflow.keras import layers
-from tensorflow.keras import optimizers, losses, metrics
-from tensorflow.keras import preprocessing
-from tensorflow.keras.models import load_model
-import numpy as np
-import pandas as pd
-#import matplotlib.pyplot as plt
-import os
-import re
-import jieba
-
-
-def main(request):
-    if request.method == "POST":
-        get_text = request.POST["get_text"]
-        token_text = " ".join(jieba.cut(get_text))
-        input_seq = make_predict_input(token_text)
-        output = generate_text(input_seq)
-
-        output = "旅行什么时候都好"
-        
-        context = {
-            "output" : output.replace(" ", "")
-        }
-        return render(request, "main_app/main.html", context)
-
-    return render(request, "main_app/main.html")
-
-
-
 #response를 위한 딥러닝 코드!
 # 태그 단어
 PAD = "<PADDING>"   # 패딩
@@ -75,8 +43,9 @@ def pos_tag(sentences):
         sentence = re.sub(RE_FILTER, "", sentence)
         
         # 배열인 형태소분석의 출력을 띄어쓰기로 구분하여 붙임
-        sentences_pos.append(sentence)
-        print(sentence)
+        #sentence = " ".join(tagger.morphs(sentence))
+        sentences_pos.append(jieba.cut(sentence))
+        print(sentences)
         
     return sentences_pos
 
@@ -91,7 +60,7 @@ words = []
 
 # 단어들의 배열 생성
 for sentence in sentences:
-    for word in sentence.split():
+    for word in sentence:
         words.append(word)
 
 # 길이가 0인 단어는 삭제
@@ -145,7 +114,7 @@ def convert_text_to_index(sentences, vocabulary, type):
             sentence_index.extend([vocabulary[STA]])
         
         # 문장의 단어들을 띄어쓰기로 분리
-        for word in sentence.split():
+        for word in sentence:
             if vocabulary.get(word) is not None:
                 # 사전에 있는 단어면 해당 인덱스를 추가
                 sentence_index.extend([vocabulary[word]])
@@ -200,7 +169,7 @@ def generate_text(input_seq):
     # 인덱스 초기화
     indexs = []
     
-    decoder_model = load_model(r"C:\Users\WIN10\Desktop\UCCProject\ChineseChatBotProject\chaotbotproject\chatbot\model\decoder_model2.h5")
+    decoder_model = load_model(r"C:\Users\WIN10\Desktop\UCCProject\ChineseChatBotProject\chaotbotproject\chatbot\model\decoder_model3.h5")
 
     while 1:
         # 디코더로 현재 타임 스텝 출력 구함

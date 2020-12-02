@@ -1,22 +1,84 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XinXinLi</title>
+    <title>心心移</title>
+    <style>
+
+        .title{
+            background-color:orange;
+            height: 150px;
+            font-size: 2.5cm;
+            text-align: center;
+            color: white;
+            font-weight: 3px;
+        }
+
+        .main{
+            height: 300px;
+            width: 500px;
+            margin-bottom: 300px;
+            margin-left: 300px;
+            position: relative;
+        }
+
+        .inner{
+            flex-direction: row;
+        }
+
+        textarea{
+            background-color: antiquewhite;
+            font-size: 0.5cm;
+        }
+
+        input{
+            margin-left: 270px;
+        }
+
+        img{
+            border: 3px solid red;
+            width: 20px;
+            height: 20px;
+        }
+
+        .answer{
+            background-color: antiquewhite;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>XinXinLi</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <textarea name="get_text" rows="3" cols="20" placeholder="아무 말이나 입력해보세요!"></textarea>
-        <br>
-        <input type="submit" value="Button">
-    </form>
+    <header class="title">心心移</header>
+    <br />
+    <br />
 
-    {% if output %}
-        {{ output }}
-    {% endif %}
+    <div class="main">
+        <div class="element">
+            <div class="inner">
+                <img src="{% static 'img/question.png' %}" alt="" />
+                <form method="POST">
+                    {% csrf_token %}
+                    <textarea name="get_text" rows="3" cols="60" placeholder="아무 말이나 입력해보세요!"></textarea>
+                    <br>
+                    <input type="submit" value="Button">
+                </form>
+            </div>
+        </div>
+        <br />
+        <br />
 
+        <div class="element">
+            <div class="inner">
+                <img src="{% static 'img/answer1.png' %}" alt="" />
+                <div class="answer">
+                    {% if output %}
+                        {{ output }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
